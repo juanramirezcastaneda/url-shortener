@@ -1,0 +1,21 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "description": "Project intended to generate short urls from passed arguments",
+  "main": "server.js",
+  "repository": "git@github.com:juanramirezcastaneda/url-shortener.git",
+  "author": "juanramirezcastaneda",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongo-db": "1.0.2",
+    "mongoose": "5.8.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
