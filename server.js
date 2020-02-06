@@ -3,7 +3,6 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-
 var cors = require('cors');
 
 var app = express();
@@ -19,6 +18,8 @@ app.use(cors());
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
 
+app.use(express.json());
+
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.get('/', function (req, res) {
@@ -26,11 +27,11 @@ app.get('/', function (req, res) {
 });
 
 app.post("/api/shorturl/new", function (req, res) {
-    console.log(req);
+    console.log(req.body);
 
     const urlToShorten = req.body.url;
     const isUrlValid = validateUrl(urlToShorten);
-    const shortUrl = shortUrl(urlToShorten);
+    const shortUrl = shortPassedUrl(urlToShorten);
 
     if (!isUrlValid) {
         res.json({ error: 'invalid Hostname' })
@@ -47,6 +48,6 @@ function validateUrl(url) {
     return false;
 }
 
-function shortUrl(url) {
+function shortPassedUrl(url) {
     return 2;
 }
