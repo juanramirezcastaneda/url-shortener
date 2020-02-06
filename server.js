@@ -49,5 +49,6 @@ function validateUrl(url) {
 }
 
 function shortPassedUrl(url) {
+    // This is the returned id from the db
     return 2;
 }
