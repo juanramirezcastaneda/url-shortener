@@ -22,7 +22,11 @@ app.get('/', function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.post("/api/shorturl/new", function (req, res) {
+app.get('/api/shorturl/', function (req, res) {
+    console.log('redirect after fetching the url from the db');
+});
+
+app.post('/api/shorturl/new', function (req, res) {
     console.log(req.body);
 
     const urlToShorten = req.body.url;
