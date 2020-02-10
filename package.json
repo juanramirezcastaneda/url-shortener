@@ -4,6 +4,7 @@
   "scripts": {
     "start": "nodemon server.js"
   },
+  "keywords": ["mongo", "express", "node", "javascript"],
   "description": "Project intended to generate short urls from passed arguments",
   "main": "server.js",
   "repository": "git@github.com:juanramirezcastaneda/url-shortener.git",
