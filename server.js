@@ -10,8 +10,29 @@ var app = express();
 // Basic Configuration 
 var port = process.env.PORT || 8000;
 
-/** this project needs a db !! **/
-// mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGOLAB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+var Schema = mongoose.Schema;
+
+var urlSchema = new Schema({
+    origin: { type: String, required: true }
+});
+
+var ShortenUrl = new mongoose.model("Url-Shorten", urlSchema);
+
+var createAndSaveAUrl = function (origin, done) {
+    var newShortenUrl = new ShortenUrl({ origin });
+
+    newShortenUrl.save(function (err, data) {
+        if (err) {
+            done(err);
+        }
+        done(null, data);
+    });
+};
 
 app.use(cors());
 app.use(express.json());
@@ -50,5 +71,6 @@ function validateUrl(url) {
 
 function shortPassedUrl(url) {
     // This is the returned id from the db
+    // Check in mongodbatlas for the current table user-map inside the test collection
     return 2;
 }
