@@ -27,9 +27,29 @@
         The generator works when a client perform a request towards <i>/api/shorturl/new</i>        
       </pre>
       <div>
-        <input type="text">
-        <button id='post-url'>Click me to post url!</button>
+        <input id="url-to-short" type="text" />
+        <button id="post-url">Click me to post url!</button>
       </div>
     </main>
+
+    <script>
+      const postUrl = function(url) {
+        const data = { url: url };
+
+        return fetch("/api/shorturl/new", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      const btn = document.getElementById("post-url");
+
+      btn.onclick = evt => {
+        var urlInput = document.getElementById("url-to-short");
+        postUrl(urlInput.value);
+      };
+    </script>
   </body>
 </html>
