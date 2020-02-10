@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config();
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
