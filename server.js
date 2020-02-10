@@ -5,8 +5,9 @@ var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var cors = require('cors');
-
 var app = express();
+
+var timeout = 10000;
 
 // Basic Configuration 
 var port = process.env.PORT || 8000;
@@ -28,6 +29,11 @@ var createAndSaveAUrl = function (origin, done) {
     var newShortenUrl = new ShortenUrl({ origin });
 
     newShortenUrl.save(function (err, data) {
+
+        console.log(err);
+        console.log(data);
+
+
         if (err) {
             done(err);
         }
@@ -48,9 +54,7 @@ app.get('/api/shorturl/', function (req, res) {
     console.log('redirect after fetching the url from the db');
 });
 
-app.post('/api/shorturl/new', function (req, res) {
-    console.log(req.body);
-
+app.post('/api/shorturl/new', function (req, res, next) {
     const urlToShorten = req.body.url;
     const isUrlValid = validateUrl(urlToShorten);
     const shortUrl = shortPassedUrl(urlToShorten);
@@ -58,7 +62,7 @@ app.post('/api/shorturl/new', function (req, res) {
     if (!isUrlValid) {
         res.json({ error: 'invalid Hostname' })
     } else {
-        res.json({ 'original_url': urlToShorten, 'short_url': 2 });
+        res.json({ 'original_url': shortUrl.origin, 'short_url': 2 });
     }
 });
 
@@ -71,7 +75,10 @@ function validateUrl(url) {
 }
 
 function shortPassedUrl(url) {
-    // This is the returned id from the db
-    // Check in mongodbatlas for the current table user-map inside the test collection
-    return 2;
+    createAndSaveAUrl(url, function (err, data) {
+        if (data) {
+            return data;
+        }
+        return null;
+    });
 }
