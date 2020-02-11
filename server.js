@@ -7,8 +7,6 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 var app = express();
 
-var timeout = 10000;
-
 // Basic Configuration 
 var port = process.env.PORT || 8000;
 
@@ -20,19 +18,22 @@ mongoose.connect(process.env.MONGOLAB_URI, {
 var Schema = mongoose.Schema;
 
 var urlSchema = new Schema({
-    origin: { type: String, required: true }
+    origin: { type: String, required: true },
+    seq: { type: Number, required: true }
 });
 
 var ShortenUrl = new mongoose.model("Url-Shorten", urlSchema);
 
 var createAndSaveAUrl = async function (origin) {
-    var newShortenUrl = new ShortenUrl({ origin });
+    const result = await ShortenUrl.findOne().sort({ seq: -1 })
+
+    const newShortenUrl = !!!result ? new ShortenUrl({ origin: origin, seq: 1 }) :
+        new ShortenUrl({ origin: origin, seq: result.seq + 1 });
+
     try {
         const shortenUrl = await newShortenUrl.save();
-        console.log(shortenUrl);
         return shortenUrl;
     } catch (error) {
-        console.log(error);
         return null;
     }
 };
