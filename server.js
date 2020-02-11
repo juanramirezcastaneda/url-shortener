@@ -51,15 +51,15 @@ app.get('/api/shorturl/', function (req, res) {
     console.log('redirect after fetching the url from the db');
 });
 
-app.post('/api/shorturl/new', function (req, res, next) {
+app.post('/api/shorturl/new', async function (req, res, next) {
     const urlToShorten = req.body.url;
     const isUrlValid = validateUrl(urlToShorten);
-    const shortUrl = createAndSaveAUrl(urlToShorten);
+    const shortUrl = await createAndSaveAUrl(urlToShorten);
 
     if (!isUrlValid) {
         res.json({ error: 'invalid Hostname' })
     } else {
-        res.json({ 'original_url': shortUrl.origin, 'short_url': 2 });
+        res.json({ 'original_url': shortUrl.origin, 'short_url': shortUrl.seq });
     }
 });
 
