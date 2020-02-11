@@ -47,9 +47,9 @@ app.get('/', function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.get('/api/shorturl/:short_url', function (req, _res) {
-    console.log(req.params.short_url);
-    console.log('redirect after fetching the url from the db');
+app.get('/api/shorturl/:short_url', async function (req, res) {
+    const url = await ShortenUrl.findOne({ seq: req.params.short_url }).sort({ seq: -1 });
+    return res.json({ origin: url.origin });
 });
 
 app.post('/api/shorturl/new', async function (req, res, _next) {
