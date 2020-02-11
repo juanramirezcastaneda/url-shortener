@@ -75,7 +75,7 @@ function validateUrl(url) {
 }
 
 function shortPassedUrl(url) {
-    createAndSaveAUrl(url, function (err, data) {
+    createAndSaveAUrl(url, function (_err, data) {
         if (data) {
             return data;
         }
