@@ -25,20 +25,16 @@ var urlSchema = new Schema({
 
 var ShortenUrl = new mongoose.model("Url-Shorten", urlSchema);
 
-var createAndSaveAUrl = function (origin, done) {
+var createAndSaveAUrl = async function (origin) {
     var newShortenUrl = new ShortenUrl({ origin });
-
-    newShortenUrl.save(function (err, data) {
-
-        console.log(err);
-        console.log(data);
-
-
-        if (err) {
-            done(err);
-        }
-        done(null, data);
-    });
+    try {
+        const shortenUrl = await newShortenUrl.save();
+        console.log(shortenUrl);
+        return shortenUrl;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 };
 
 app.use(cors());
@@ -57,7 +53,7 @@ app.get('/api/shorturl/', function (req, res) {
 app.post('/api/shorturl/new', function (req, res, next) {
     const urlToShorten = req.body.url;
     const isUrlValid = validateUrl(urlToShorten);
-    const shortUrl = shortPassedUrl(urlToShorten);
+    const shortUrl = createAndSaveAUrl(urlToShorten);
 
     if (!isUrlValid) {
         res.json({ error: 'invalid Hostname' })
@@ -72,13 +68,4 @@ app.listen(port, function () {
 
 function validateUrl(url) {
     return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(url);
-}
-
-function shortPassedUrl(url) {
-    createAndSaveAUrl(url, function (_err, data) {
-        if (data) {
-            return data;
-        }
-        return null;
-    });
 }
