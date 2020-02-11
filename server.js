@@ -47,11 +47,12 @@ app.get('/', function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.get('/api/shorturl/', function (req, res) {
+app.get('/api/shorturl/:short_url', function (req, _res) {
+    console.log(req.params.short_url);
     console.log('redirect after fetching the url from the db');
 });
 
-app.post('/api/shorturl/new', async function (req, res, next) {
+app.post('/api/shorturl/new', async function (req, res, _next) {
     const urlToShorten = req.body.url;
     const isUrlValid = validateUrl(urlToShorten);
     const shortUrl = await createAndSaveAUrl(urlToShorten);
