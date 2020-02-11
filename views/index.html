@@ -49,9 +49,14 @@
         });
       };
 
-      const getRedirectUrl = async function(url) {
-        const redirectResult = await fetch(`/api/shorturl/${url}`);
-        return redirectResult;
+      const getRedirectUrl = function(url) {
+        fetch(`/api/shorturl/${url}`)
+          .then(res => {
+            return res.json();
+          })
+          .then(url => {
+            window.location = url.origin;
+          });        
       };
 
       const btn = document.getElementById("post-url");
@@ -64,9 +69,8 @@
 
       redirect_btn.onclick = evt => {
         var redirect = document.getElementById("redirect-to-short");
-        const redirectUrl = getRedirectUrl(redirect.value);      
+        const redirectUrl = getRedirectUrl(redirect.value);
       };
-
     </script>
   </body>
 </html>
